@@ -4,7 +4,7 @@ This guide explains how to run the Clober MCP server locally using **Bun** and C
 
 ---
 
-# 1️⃣ Requirements
+## 1️⃣ Requirements
 
 - Bun installed
 - Claude Desktop installed
@@ -12,7 +12,7 @@ This guide explains how to run the Clober MCP server locally using **Bun** and C
 
 ---
 
-# 2️⃣ Install Dependencies
+## 2️⃣ Install Dependencies
 
 ```bash
 bun install
@@ -20,7 +20,7 @@ bun install
 
 ---
 
-# 3️⃣ Run MCP Manually (Optional Test)
+## 3️⃣ Run MCP Manually (Optional Test)
 
 ```bash
 bun index.ts
@@ -28,7 +28,7 @@ bun index.ts
 
 ---
 
-# 4️⃣ Claude Desktop MCP Configuration
+## 4️⃣ Claude Desktop MCP Configuration
 
 Open:
 
