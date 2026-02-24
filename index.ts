@@ -1,4 +1,12 @@
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+
 import { openOrdersTool } from './tools/open-orders.ts'
+import { limitTool } from './tools/limit'
+import { supportedChainsTool } from './tools/supported-chains.ts'
+import { resolveTokenTool } from './tools/resolve-token.ts'
+import { claimOrdersTool } from './tools/claim-orders.ts'
+import { cancelOrdersTool } from './tools/cancel-orders.ts'
 
 process.on('unhandledRejection', (err) => {
   console.error('UNHANDLED_REJECTION', err)
@@ -7,13 +15,6 @@ process.on('unhandledRejection', (err) => {
 process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT_EXCEPTION', err)
 })
-
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
-
-import { limitTool } from './tools/limit'
-import { supportedChainsTool } from './tools/supported-chains.ts'
-import { resolveTokenTool } from './tools/resolve-token.ts'
 
 const server = new McpServer({
   name: 'Clober MCP',
@@ -88,6 +89,30 @@ server.tool(
           text: JSON.stringify(result, null, 2),
         },
       ],
+    }
+  },
+)
+
+server.tool(
+  cancelOrdersTool.name,
+  cancelOrdersTool.description,
+  cancelOrdersTool.schema,
+  async (args) => {
+    const result = await cancelOrdersTool.handler(args)
+    return {
+      content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+    }
+  },
+)
+
+server.tool(
+  claimOrdersTool.name,
+  claimOrdersTool.description,
+  claimOrdersTool.schema,
+  async (args) => {
+    const result = await claimOrdersTool.handler(args)
+    return {
+      content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
     }
   },
 )
