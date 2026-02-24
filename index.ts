@@ -1,0 +1,80 @@
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED_REJECTION', err)
+})
+
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT_EXCEPTION', err)
+})
+
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+
+import { limitTool } from './tools/limit'
+import { supportedChainsTool } from './tools/supported-chains.ts'
+import { resolveTokenTool } from './tools/resolve-token.ts'
+
+const server = new McpServer({
+  name: 'Clober MCP',
+  version: '1.0.0',
+})
+
+server.tool(
+  supportedChainsTool.name,
+  supportedChainsTool.description,
+  supportedChainsTool.schema,
+  async () => {
+    const result = await supportedChainsTool.handler()
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    }
+  },
+)
+
+server.tool(
+  resolveTokenTool.name,
+  resolveTokenTool.description,
+  resolveTokenTool.schema,
+  async (args) => {
+    const result = await resolveTokenTool.handler(args)
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    }
+  },
+)
+
+server.tool(
+  limitTool.name,
+  limitTool.description,
+  limitTool.schema,
+  async (args) => {
+    const result = await limitTool.handler(args)
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    }
+  },
+)
+
+async function start() {
+  const transport = new StdioServerTransport()
+  await server.connect(transport)
+}
+
+start()
