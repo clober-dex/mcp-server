@@ -1,3 +1,5 @@
+import { openOrdersTool } from './tools/open-orders.ts'
+
 process.on('unhandledRejection', (err) => {
   console.error('UNHANDLED_REJECTION', err)
 })
@@ -42,6 +44,24 @@ server.tool(
   resolveTokenTool.schema,
   async (args) => {
     const result = await resolveTokenTool.handler(args)
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    }
+  },
+)
+
+server.tool(
+  openOrdersTool.name,
+  openOrdersTool.description,
+  openOrdersTool.schema,
+  async (args) => {
+    const result = await openOrdersTool.handler(args)
 
     return {
       content: [
